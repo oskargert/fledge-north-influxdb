@@ -103,22 +103,22 @@ def plugin_init(data):
 	global influxdb_north, config
 	influxdb_north = InfludDBNorthPlugin(data)
 	config = data
-	_LOGGER.info("Initialized north influxdb plugin")
+	_LOGGER.exception("Initialized north influxdb plugin")
 	return config
 
 async def plugin_send(data, payload, stream_id):
 	""" Used to send the readings block from north to the configured destination.
 
-    Args:
-        handle - An object which is returned by plugin_init
-        payload - A List of readings block
-        stream_id - An Integer that uniquely identifies the connection from Fledge instance to the destination system
-    Returns:
-        Tuple which consists of
-        - A Boolean that indicates if any data has been sent
-        - The object id of the last reading which has been sent
-        - Total number of readings which has been sent to the configured destination
-    
+	Args:
+		handle - An object which is returned by plugin_init
+		payload - A List of readings block
+		stream_id - An Integer that uniquely identifies the connection from Fledge instance to the destination system
+	Returns:
+		Tuple which consists of
+		- A Boolean that indicates if any data has been sent
+		- The object id of the last reading which has been sent
+		- Total number of readings which has been sent to the configured destination
+
 	Example payload:
 		[
 			{
@@ -152,7 +152,7 @@ async def plugin_send(data, payload, stream_id):
 		return is_data_sent, new_last_object_id, num_sent
 
 def plugin_shutdown():
-    influxdb_north.close_session()
+	influxdb_north.close_session()
 
 class InfludDBNorthPlugin(object):
 
@@ -168,13 +168,13 @@ class InfludDBNorthPlugin(object):
 		num_sent = 0
 		try:
 			payload_block = list(map(lambda datapoint: {
-                                                        "measurement": self._settings["measurement"]["value"], 
-                                                        "fields": datapoint["reading"], 
-                                                        "tags": {
-                                                            "asset_code": datapoint["asset_code"]
-                                                            }, 
-                                                        "time": datapoint["user_ts"]
-                                                    }, 
+														"measurement": self._settings["measurement"]["value"], 
+														"fields": datapoint["reading"], 
+														"tags": {
+														    "asset_code": datapoint["asset_code"]
+														    }, 
+														"time": datapoint["user_ts"]
+													}, 
                                                     payloads))
 			num_sent = await self._send_payloads(payload_block)
 			is_data_sent = True
