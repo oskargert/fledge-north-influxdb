@@ -173,7 +173,7 @@ class InfludDBNorthPlugin(object):
 		num_sent = 0
 		try:
 			insert_data = list(map(lambda datapoint: {
-                                                        "measurement": settings["measurement"]["value"], 
+                                                        "measurement": self._settings["measurement"]["value"], 
                                                         "fields": datapoint["reading"], 
                                                         "tags": {
                                                             "asset_code": datapoint["asset_code"]
