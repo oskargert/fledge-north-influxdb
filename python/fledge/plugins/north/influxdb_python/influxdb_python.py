@@ -103,7 +103,7 @@ def plugin_init(data):
 	global influxdb_north, config
 	influxdb_north = InfludDBNorthPlugin(data)
 	config = data
-	_LOGGER.exception("Initialized north influxdb plugin")
+	_LOGGER.info("Initialized north influxdb plugin")
 	return config
 
 async def plugin_send(data, payload, stream_id):
