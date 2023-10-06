@@ -91,20 +91,20 @@ _DEFAULT_CONFIG = {
 	}
 
 def plugin_info():
-    return {
-        'name': 'influxdb_north_python',
-        'version': '${VERSION}',
-        'type': 'north',
-        'interface': '1.0',
-        'config': _DEFAULT_CONFIG
-    }
+	return {
+		'name': 'influxdb_north_python',
+		'version': '${VERSION}',
+		'type': 'north',
+		'interface': '1.0',
+		'config': _DEFAULT_CONFIG
+	}
 
 def plugin_init(data):
-    global influxdb_north, config
-    influxdb_north = InfludDBNorthPlugin(data)
-    config = data
+	global influxdb_north, config
+	influxdb_north = InfludDBNorthPlugin(data)
+	config = data
 	_LOGGER.info("Initialized north influxdb plugin")
-    return config
+	return config
 
 async def plugin_send(data, payload, stream_id):
 	""" Used to send the readings block from north to the configured destination.
