@@ -150,8 +150,10 @@ async def plugin_send(data, payload, stream_id):
 	
 	"""
 	try:
+		_LOGGER.info("received data to insert.")
 		is_data_sent, new_last_object_id, num_sent = await influxdb_north.send_payloads(payload)
 	except asyncio.CancelledError:
+		_LOGGER.exception("Data could not be sent. Error: {}.".format(error))
 		pass
 	else:
 		return is_data_sent, new_last_object_id, num_sent
