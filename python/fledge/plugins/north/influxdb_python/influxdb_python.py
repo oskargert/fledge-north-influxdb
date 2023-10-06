@@ -52,32 +52,39 @@ _DEFAULT_CONFIG = {
 			"order": "4",
 			"displayName": "Bucket"
 			},
+		"measurement": {
+			"description": "Measurement to write the data to",
+			"type": "string",
+			"default": "fledge",
+			"order": "5",
+			"displayName": "Measurement"
+			},
 		"org": {
 			"description": "Influxdb Org",
 			"type": "string",
 			"default": "fledge",
-			"order": "5",
+			"order": "6",
 			"displayName": "Organisation"
 			},
 		"token": {
 			"description": "Access token for the database",
 			"type": "string",
 			"default": "",
-			"order": "6",
+			"order": "7",
 			"displayName": "Token"
 			},
 		"username": {
 			"description": "The InfluxDB database user name",
 			"type": "string",
 			"default": "",
-			"order": "7",
+			"order": "8",
 			"displayName": "Username"
 			},
 		"password": {
 			"description": "The InfluxDB database user password",
 			"type": "password",
 			"default": "",
-			"order": "8",
+			"order": "9",
 			"displayName": "Password"
 			},
 		"source": {
@@ -85,7 +92,7 @@ _DEFAULT_CONFIG = {
 			"type": "enumeration",
 			"default": "readings",
 			"options": ["readings", "statistics"],
-		       	"order": "9",
+		       	"order": "10",
 			"displayName": "Source"
 			}
 	}
@@ -166,7 +173,7 @@ class InfludDBNorthPlugin(object):
 		num_sent = 0
 		try:
 			insert_data = list(map(lambda datapoint: {
-                                                        "measurement": measurement, 
+                                                        "measurement": settings["measurement"]["value"], 
                                                         "fields": datapoint["reading"], 
                                                         "tags": {
                                                             "asset_code": datapoint["asset_code"]
