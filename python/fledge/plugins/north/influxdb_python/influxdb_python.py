@@ -185,7 +185,7 @@ class InfludDBNorthPlugin(object):
 			is_data_sent = True
 			last_object_id = payloads[-1]["id"]
 		except Exception as error:
-			_LOGGER.exceptions("Data could not be sent. Error: {}.".format(error))
+			_LOGGER.exception("Data could not be sent. Error: {}.".format(error))
 
 		return is_data_sent, last_object_id, num_sent
 
