@@ -103,7 +103,7 @@ def plugin_init(data):
     global influxdb_north, config
     influxdb_north = InfludDBNorthPlugin(data)
     config = data
-	_LOGGER.info("Initialized north influxdb plugin")
+	# _LOGGER.info("Initialized north influxdb plugin")
     return config
 
 async def plugin_send(data, payload, stream_id):
@@ -142,30 +142,30 @@ async def plugin_send(data, payload, stream_id):
 		]	
 	
 	"""
-    try:
-        is_data_sent, new_last_object_id, num_sent = await influxdb_north.send_payloads(payload)
-    except asyncio.CancelledError:
-        pass
-    else:
-        return is_data_sent, new_last_object_id, num_sent
+	try:
+		is_data_sent, new_last_object_id, num_sent = await influxdb_north.send_payloads(payload)
+	except asyncio.CancelledError:
+		pass
+	else:
+		return is_data_sent, new_last_object_id, num_sent
 
 def plugin_shutdown():
     influxdb_north.close_session()
 
-class InfludDBNorthPlugin
+class InfludDBNorthPlugin(object):
 
-    def __init__(self, settings: dict):
-        url = settings["host"]["value"] + ":" + settings:["port"]["value"]
-        url = "http://" + url if "http" not in url else url
-        self._client = InfluxDBClient(url=url, token=settings["token"]["value"], org=settings["org"]["value"])
-        self._settings = settings
+	def __init__(self, settings: dict):
+		url = settings["host"]["value"] + ":" + settings["port"]["value"]
+		url = "http://" + url if "http" not in url else url
+		self._client = InfluxDBClient(url=url, token=settings["token"]["value"], org=settings["org"]["value"])
+		self._settings = settings
 
-    async def send_payloads(self, payloads):
-        is_data_sent = False
-        last_object_id = 0
-        num_sent = 0
-        try:
-            insert_data = list(map(lambda datapoint: {
+	async def send_payloads(self, payloads):
+		is_data_sent = False
+		last_object_id = 0
+		num_sent = 0
+		try:
+			insert_data = list(map(lambda datapoint: {
                                                         "measurement": measurement, 
                                                         "fields": datapoint["reading"], 
                                                         "tags": {
@@ -174,22 +174,22 @@ class InfludDBNorthPlugin
                                                         "time": datapoint["user_ts"]
                                                     }, 
                                                     payloads))
-            num_sent = await self._send_payloads(payload_block)
+			num_sent = await self._send_payloads(payload_block)
 			is_data_sent = True
 			last_object_id = payloads[-1]["id"]
-        except Exception as error:
+		except Exception as error:
 			_LOGGER.exceptions("Data could not be sent. Error: {}.".format(error))
-        
+
 		return is_data_sent, last_object_id, num_sent
 
-    async def _send_payloads(self, payload_block):
-        try:
-            write_api = self._client.write_api(write_options=ASYNCHRONOUS)
-            write_api.write(bucket=self._settings["bucket"]["value"], org=self._settings["org"]["value"], record=payload_block)
+	async def _send_payloads(self, payload_block):
+		try:
+			write_api = self._client.write_api(write_options=ASYNCHRONOUS)
+			write_api.write(bucket=self._settings["bucket"]["value"], org=self._settings["org"]["value"], record=payload_block)
 		except InfluxDBError as e:
-            if e.response.status == 401:
-                _LOGGER.exception(f"Insufficient write permissions to {}.".format(self._settings["bucket"]["value"]))
-            return num_sent
+			if e.response.status == 401:
+				_LOGGER.exception("Insufficient write permissions to {}.".format(self._settings["bucket"]["value"]))
+			return num_sent
 
 		else:
 			return len(payload_block)
