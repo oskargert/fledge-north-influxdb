@@ -187,12 +187,14 @@ class InfludDBNorthPlugin(object):
 		except Exception as error:
 			_LOGGER.exception("Data could not be sent. Error: {}.".format(error))
 
+		_LOGGER.info("is_data_sent: {}, last_object_id: {}, num_sent: {}.".format(is_data_sent, last_object_id, num_sent))
 		return is_data_sent, last_object_id, num_sent
 
 	async def _send_payloads(self, payload_block):
 		try:
 			write_api = self._client.write_api(write_options=ASYNCHRONOUS)
 			write_api.write(bucket=self._settings["bucket"]["value"], org=self._settings["org"]["value"], record=payload_block)
+			_LOGGER.info("inserted data in bucket: {}.".format(self._settings["bucket"]["value"]))
 		except Exception as error:
 			# if error.response.status == 401:
 			# 	_LOGGER.exception("Insufficient write permissions to {}.".format(self._settings["bucket"]["value"]))
