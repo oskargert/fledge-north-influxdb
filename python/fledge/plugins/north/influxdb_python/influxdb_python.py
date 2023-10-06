@@ -38,53 +38,46 @@ _DEFAULT_CONFIG = {
 			"order": "2",
 			"displayName": "Port"
 			},
-		"database": {
-			"description": "The InfluxDB database name",
-			"type": "string",
-			"default": "fledge",
-			"order": "3",
-			"displayName": "Database"
-			},
 		"bucket": {
 			"description": "The bucket to insert data into",
 			"type": "string",
 			"default": "fledge",
-			"order": "4",
+			"order": "3",
 			"displayName": "Bucket"
 			},
 		"measurement": {
 			"description": "Measurement to write the data to",
 			"type": "string",
 			"default": "fledge",
-			"order": "5",
+			"order": "4",
 			"displayName": "Measurement"
 			},
 		"org": {
 			"description": "Influxdb Org",
 			"type": "string",
 			"default": "fledge",
-			"order": "6",
+			"order": "5",
 			"displayName": "Organisation"
 			},
 		"token": {
 			"description": "Access token for the database",
 			"type": "string",
 			"default": "",
-			"order": "7",
+			"order": "6",
 			"displayName": "Token"
 			},
 		"username": {
 			"description": "The InfluxDB database user name",
 			"type": "string",
 			"default": "",
-			"order": "8",
+			"order": "7",
 			"displayName": "Username"
 			},
 		"password": {
 			"description": "The InfluxDB database user password",
 			"type": "password",
 			"default": "",
-			"order": "9",
+			"order": "8",
 			"displayName": "Password"
 			},
 		"source": {
@@ -92,7 +85,7 @@ _DEFAULT_CONFIG = {
 			"type": "enumeration",
 			"default": "readings",
 			"options": ["readings", "statistics"],
-		       	"order": "10",
+		       	"order": "9",
 			"displayName": "Source"
 			}
 	}
@@ -110,7 +103,7 @@ def plugin_init(data):
     global influxdb_north, config
     influxdb_north = InfludDBNorthPlugin(data)
     config = data
-	# _LOGGER.info("Initialized north influxdb plugin")
+	_LOGGER.info("Initialized north influxdb plugin")
     return config
 
 async def plugin_send(data, payload, stream_id):
