@@ -3,8 +3,8 @@
 import asyncio
 import json
 
-from fledge.common import logger
-from fledge.plugins.north.common.common import *
+# from fledge.common import logger
+# from fledge.plugins.north.common.common import *
 
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import ASYNCHRONOUS
@@ -15,7 +15,9 @@ __copyright__ = "Copyright (c) 2023 Oskar Gert"
 __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
-_LOGGER = logger.setup(__name__)
+import logging
+_LOGGER = logging
+# _LOGGER = logger.setup(__name__)
 
 _DEFAULT_CONFIG = {
 		"plugin": {
