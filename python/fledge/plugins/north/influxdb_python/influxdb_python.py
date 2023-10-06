@@ -58,7 +58,7 @@ _DEFAULT_CONFIG = {
 			"default": "fledge",
 			"order": "5",
 			"displayName": "Organisation"
-			}
+			},
 		"token": {
 			"description": "Access token for the database",
 			"type": "string",
