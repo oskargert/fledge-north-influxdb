@@ -193,10 +193,12 @@ class InfludDBNorthPlugin(object):
 		try:
 			write_api = self._client.write_api(write_options=ASYNCHRONOUS)
 			write_api.write(bucket=self._settings["bucket"]["value"], org=self._settings["org"]["value"], record=payload_block)
-		except InfluxDBError as e:
-			if e.response.status == 401:
+		except InfluxDBError as error:
+			if error.response.status == 401:
 				_LOGGER.exception("Insufficient write permissions to {}.".format(self._settings["bucket"]["value"]))
-			return num_sent
+			else:
+				_LOGGER.exception("Unable to send payload to bucket: {}. Error: {}.".format(self._settings["bucket"]["value"], error))
+			return 0
 
 		else:
 			return len(payload_block)
