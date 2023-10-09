@@ -1,0 +1,84 @@
+{
+    "plugin": {
+        "description": "Send readings to a Influxdb server",
+        "type": "string",
+        "default": "influxdb_python",
+        "readonly": "true"
+    },
+    "host": {
+        "description": "The hostname of the InfluxDB server",
+        "type": "string",
+        "default": "http://localhost",
+        "order": "1",
+        "displayName": "Host",
+        "value": "172.16.22.189"
+    },
+    "port": {
+        "description": "The port for this InfluxDB server",
+        "type": "integer",
+        "default": "8086",
+        "order": "2",
+        "displayName": "Port",
+        "value": "8086"
+    },
+    "bucket": {
+        "description": "The bucket to insert data into",
+        "type": "string",
+        "default": "fledge",
+        "order": "3",
+        "displayName": "Bucket",
+        "value": "AutoBeer"
+    },
+    "measurement": {
+        "description": "Measurement to write the data to",
+        "type": "string",
+        "default": "fledge",
+        "order": "4",
+        "displayName": "Measurement",
+        "value": "beer"
+    },
+    "org": {
+        "description": "Influxdb Org",
+        "type": "string",
+        "default": "fledge",
+        "order": "5",
+        "displayName": "Organisation",
+        "value": "CDP"
+    },
+    "token": {
+        "description": "Access token for the database",
+        "type": "string",
+        "default": "",
+        "order": "6",
+        "displayName": "Token",
+        "value": "FaVo92NPGMVXp8hq7Smpo5V5cpzgp2PIjIzCXArT1Q2MIboiLCjSCWagvTLNZVPgGYOknr57TyeXrXNkgr0rUw=="
+    },
+    "username": {
+        "description": "The InfluxDB database user name",
+        "type": "string",
+        "default": "",
+        "order": "7",
+        "displayName": "Username",
+        "value": "user"
+    },
+    "password": {
+        "description": "The InfluxDB database user password",
+        "type": "password",
+        "default": "",
+        "order": "8",
+        "displayName": "Password",
+        "value": "password"
+    },
+    "source": {
+        "description": "Defines the source of the data to be sent on the stream",
+        "type": "enumeration",
+        "default": "readings",
+        "options": [
+            "readings",
+            "statistics"
+        ],
+        "order": "9",
+        "displayName": "Source",
+        "value": "readings"
+    }
+}
