@@ -2,13 +2,10 @@
 """Influxdb North plugin"""
 import asyncio
 import json
+from datetime import datetime
 
 # from fledge.common import logger
 # from fledge.plugins.north.common.common import *
-
-from influxdb_client import InfluxDBClient
-from influxdb_client.client.write_api import ASYNCHRONOUS
-from influxdb_client.client.exceptions import InfluxDBError
 
 __author__ = "Oskar Gert"
 __copyright__ = "Copyright (c) 2023 Oskar Gert"
@@ -103,9 +100,9 @@ def plugin_info():
 
 def plugin_init(data):
 	global influxdb_north, config
-	influxdb_north = InfludDBNorthPlugin(data)
+	influxdb_north = InfluxDBNorthPlugin(data, _LOGGER)
 	config = data
-	_LOGGER.info("Initialized north influxdb plugin")
+	print("Initialized north influxdb plugin")
 	return config
 
 async def plugin_send(data, payload, stream_id):
@@ -145,7 +142,7 @@ async def plugin_send(data, payload, stream_id):
 	
 	"""
 	try:
-		_LOGGER.info("received data to insert.")
+		print("received data to insert.")
 		is_data_sent, new_last_object_id, num_sent = await influxdb_north.send_payloads(payload)
 	except asyncio.CancelledError:
 		_LOGGER.exception("Data could not be sent. Error: {}.".format(error))
@@ -154,53 +151,5 @@ async def plugin_send(data, payload, stream_id):
 		return is_data_sent, new_last_object_id, num_sent
 
 def plugin_shutdown():
-	influxdb_north.close_session()
+	pass
 
-class InfludDBNorthPlugin(object):
-
-	def __init__(self, settings: dict):
-		url = settings["host"]["value"] + ":" + settings["port"]["value"]
-		url = "http://" + url if "http" not in url else url
-		self._client = InfluxDBClient(url=url, token=settings["token"]["value"], org=settings["org"]["value"])
-		self._settings = settings
-
-	async def send_payloads(self, payloads):
-		is_data_sent = False
-		last_object_id = 0
-		num_sent = 0
-		try:
-			payload_block = list(map(lambda datapoint: {
-														"measurement": self._settings["measurement"]["value"], 
-														"fields": datapoint["reading"], 
-														"tags": {
-														    "asset_code": datapoint["asset_code"]
-														    }, 
-														"time": datapoint["user_ts"]
-													}, 
-                                                    payloads))
-			num_sent = await self._send_payloads(payload_block)
-			is_data_sent = True
-			last_object_id = payloads[-1]["id"]
-		except Exception as error:
-			_LOGGER.exception("Data could not be sent. Error: {}.".format(error))
-
-		_LOGGER.info("is_data_sent: {}, last_object_id: {}, num_sent: {}.".format(is_data_sent, last_object_id, num_sent))
-		return is_data_sent, last_object_id, num_sent
-
-	async def _send_payloads(self, payload_block):
-		try:
-			write_api = self._client.write_api(write_options=ASYNCHRONOUS)
-			write_api.write(bucket=self._settings["bucket"]["value"], org=self._settings["org"]["value"], record=payload_block)
-			_LOGGER.info("inserted data in bucket: {}.".format(self._settings["bucket"]["value"]))
-		except Exception as error:
-			# if error.response.status == 401:
-			# 	_LOGGER.exception("Insufficient write permissions to {}.".format(self._settings["bucket"]["value"]))
-			# else:
-			_LOGGER.exception("Unable to send payload to bucket: {}. Error: {}.".format(self._settings["bucket"]["value"], error))
-			return 0
-
-		else:
-			return len(payload_block)
-
-	def close_session():
-		self._client.close()
