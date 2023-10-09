@@ -1,1 +1,1 @@
-influxdb-client==1.37.0
+influxdb-client[async]==1.38.0
