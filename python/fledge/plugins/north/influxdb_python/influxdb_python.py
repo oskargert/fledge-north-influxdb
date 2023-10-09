@@ -4,8 +4,10 @@ import asyncio
 import json
 from datetime import datetime
 
-# from fledge.common import logger
-# from fledge.plugins.north.common.common import *
+from fledge.common import logger
+from fledge.plugins.north.common.common import *
+
+from InfluxDBNorthPlugin import InfluxDBNorthPlugin
 
 __author__ = "Oskar Gert"
 __copyright__ = "Copyright (c) 2023 Oskar Gert"
