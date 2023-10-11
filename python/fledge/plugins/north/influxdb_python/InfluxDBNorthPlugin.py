@@ -23,7 +23,7 @@ class InfluxDBNorthPlugin(object):
 			payload_block = list(map(lambda datapoint: 
 				{
 					"measurement": datapoint["asset_code"], 
-					"tag": {
+					"tags": {
 						"plugin": "fledge"
 					},
 					"fields": datapoint["reading"],
