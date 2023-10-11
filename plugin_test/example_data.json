@@ -1,7 +1,9 @@
 [
     {
         "reading": {
-            "sinusoid": 0.01
+            "sinusoid": 0.01,
+            "sinusoid2": 0.01
+
         },
         "asset_code": "sinusoid",
         "id": 1,
