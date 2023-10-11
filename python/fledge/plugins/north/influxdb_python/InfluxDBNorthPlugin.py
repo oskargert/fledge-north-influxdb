@@ -21,17 +21,14 @@ class InfluxDBNorthPlugin(object):
 		num_sent = 0
 		try:
 			payload_block = list(map(lambda datapoint: 
-				Point(datapoint["asset_code"])
-					.tag("plugin", 
-						"fledge"
-					)
-					.field(
-						list(datapoint["reading"].keys())[0], 
-						list(datapoint["reading"].values())[0]
-					)
-					.time(
-						datapoint["user_ts"]
-					),
+				{
+					"measurement": datapoint["asset_code"], 
+					"tag": {
+						"plugin": "fledge"
+					},
+					"fields": datapoint["reading"],
+					"time": datapoint["user_ts"]
+				},
 					payloads))
 			num_sent = await self._send_payloads(payload_block)
 			is_data_sent = True
