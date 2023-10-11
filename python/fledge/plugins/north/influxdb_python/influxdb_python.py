@@ -14,9 +14,7 @@ __copyright__ = "Copyright (c) 2023 Oskar Gert"
 __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
-import logging
-_LOGGER = logging
-# _LOGGER = logger.setup(__name__)
+_LOGGER = logger.setup(__name__)
 
 _DEFAULT_CONFIG = {
 		"plugin": {
@@ -104,7 +102,7 @@ def plugin_init(data):
 	global influxdb_north, config
 	influxdb_north = InfluxDBNorthPlugin(data, _LOGGER)
 	config = data
-	print("Initialized north influxdb plugin")
+	_LOGGER.info("Initialized north influxdb plugin")
 	return config
 
 async def plugin_send(data, payload, stream_id):
