@@ -89,7 +89,7 @@ _DEFAULT_CONFIG = {
 def plugin_info():
 	return {
 		'name': 'influxdb_north_python',
-		'version': '2.2.0',
+		'version': '2.3.0',
 		'type': 'north',
 		'interface': '1.0',
 		'config': _DEFAULT_CONFIG
